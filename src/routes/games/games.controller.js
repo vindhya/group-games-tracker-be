@@ -1,17 +1,18 @@
-const db = require('../../db');
+const { getAllWins } = require('../../utils/helpers');
 
 const gamesController = (req, res) => {
-  const { game } = req.params;
+  // db.collection()
+  //   .get()
+  //   .then(snapshot =>
+  //     res.status(200).json({
+  //       data: snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+  //     })
+  //   )
+  //   .catch(error => res.status(400).json({ error }));
 
-  db.collection(game)
-    .get()
-    .then(snapshot =>
-      res
-        .status(200)
-        .json({
-          data: snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
-        })
-    )
+  getAllWins()
+    // try just .json({ data }) later
+    .then(data => res.status(200).json({ data: data }))
     .catch(error => res.status(400).json({ error }));
 };
 
