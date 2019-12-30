@@ -3,6 +3,24 @@ const mergeWith = require('lodash/mergeWith');
 const db = require('../db');
 const { GAMES } = require('../constants');
 
+const getCoupStats = async () => {
+  const snapshot = await db.collection(GAMES.COUP).get();
+
+  return snapshot.docs.map(currentDoc => {
+    const doc = currentDoc.data();
+    return { id: currentDoc.id, ...doc };
+  });
+};
+
+const getAvalonStats = async () => {
+  const snapshot = await db.collection(GAMES.AVALON).get();
+
+  return snapshot.docs.map(currentDoc => {
+    const doc = currentDoc.data();
+    return { id: currentDoc.id, ...doc };
+  });
+};
+
 const getOverallCoupWins = async () => {
   const snapshot = await db.collection(GAMES.COUP).get();
 
@@ -54,4 +72,18 @@ const getAllWins = async () => {
   return totalWins;
 };
 
-module.exports = { getAllWins };
+const getCoupData = async () => {
+  const data = { wins: {}, stats: [] };
+  data.wins = await getOverallCoupWins();
+  data.stats = await getCoupStats();
+  return data;
+};
+
+const getAvalonData = async () => {
+  const data = { wins: {}, stats: [] };
+  data.wins = await getOverallAvalonWins();
+  data.stats = await getAvalonStats();
+  return data;
+};
+
+module.exports = { getAllWins, getCoupData, getAvalonData };
